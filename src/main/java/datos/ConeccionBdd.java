@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 public class ConeccionBdd {
     
     Connection con = null;
-    Utilitarios uti = new Utilitarios();
+    Metodos uti = new Metodos();
     
     
     private static String driver= "com.mysql.jdbc.Driver";

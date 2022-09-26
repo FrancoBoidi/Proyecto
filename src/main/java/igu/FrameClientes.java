@@ -4,13 +4,15 @@
  */
 package igu;
 
+
 import negocio.Clientes;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import javax.swing.JTextField;
 
 
 public class FrameClientes extends javax.swing.JFrame {
-    Clientes obj = new Clientes(cod, razsoc, cuit, tel, email, prov, loc, Date.valueOf(fecha));
+    Clientes obj = new Clientes();
     boolean bandera=false;
     
     /**
@@ -31,6 +33,7 @@ public class FrameClientes extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         FormCliente = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
@@ -60,8 +63,8 @@ public class FrameClientes extends javax.swing.JFrame {
         btnBuscar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         btnNuevo = new javax.swing.JButton();
-        boxAfip = new javax.swing.JComboBox<>();
         jdcFecha = new com.toedter.calendar.JDateChooser();
+        jChkAfip = new javax.swing.JCheckBox();
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -115,7 +118,7 @@ public class FrameClientes extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -211,7 +214,9 @@ public class FrameClientes extends javax.swing.JFrame {
                 .addGap(25, 25, 25))
         );
 
-        boxAfip.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Inscripto", "No inscripto" }));
+        jdcFecha.setDateFormatString("yyyy-MM-dd");
+
+        jChkAfip.setText("Inscripto");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -229,9 +234,9 @@ public class FrameClientes extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jLabel3)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtProv, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtLoc, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -240,10 +245,12 @@ public class FrameClientes extends javax.swing.JFrame {
                             .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtTel, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtNro, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jdcFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jdcFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(49, 49, 49)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(boxAfip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(jChkAfip)))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -284,11 +291,11 @@ public class FrameClientes extends javax.swing.JFrame {
                             .addComponent(jLabel9)
                             .addComponent(txtLoc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
+                .addGap(10, 10, 10)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(boxAfip, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                    .addComponent(jChkAfip))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -328,7 +335,7 @@ public class FrameClientes extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 135, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
                 .addComponent(FormCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -354,23 +361,31 @@ public class FrameClientes extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
            String nom=txtRazsoc.getText();
-           int cuit=Integer.parseInt(txtCuit.getText());
-           String fecha = ((JTextField)jdcFecha.getDateEditor().getUiComponent()).getText();
+           String cuit=txtCuit.getText();
+           SimpleDateFormat formatoFecha = new SimpleDateFormat ("yyyy-MM-dd");
+           String fecha = formatoFecha.format(jdcFecha.getDate());
            String email=txtEmail.getText();
            String tel=txtTel.getText();
            String prov=txtProv.getText();
            String loc=txtLoc.getText();
-           String afip = boxAfip.getSelectedItem().toString();
+           int afip;
+           if (jChkAfip.isSelected()==true){
+               afip=1;
+           }else {
+               afip=0;
+           }
+               
            
+           //UTILIZAR BANDERAS PARA DETERMINAR SI LO QUE SE QUIERE GUARDAR ES EDITADO O NUEVO
            if(bandera==true)
            {
-               //CODIGO PARA GUARDAR UN CLIENTE
+               //GUARDAR UN CLIENTE NUEVO
                
-               obj.agregar(nom, cuit, Date.valueOf(fecha), email, tel, prov, loc, afip);
+               obj.agregar(nom, cuit, Date.valueOf(fecha), email, tel, prov, loc,afip);
            }else{
-               // CODIGO PARA ACTUALIZAR
+               // ACTUALIZAR O EDITAR UN CLIENTE
                int nro=Integer.valueOf(txtNro.getText());
-               obj.actualizar(nro, nom, cuit,fecha,  email, tel, prov, loc, afip); 
+               obj.actualizar(nro, nom, cuit,Date.valueOf(fecha),  email, tel, prov, loc,afip); 
            }
            
            TblCliente.setModel(obj.lista());
@@ -398,7 +413,7 @@ public class FrameClientes extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void on () {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -436,12 +451,13 @@ public class FrameClientes extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane FormCliente;
     private javax.swing.JTable TblCliente;
-    private javax.swing.JComboBox<String> boxAfip;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnNuevo;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JCheckBox jChkAfip;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -469,15 +485,17 @@ public class FrameClientes extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     public void manejoCajas(boolean a){
-        txtNro.setEnabled(false);
+        txtNro.setEnabled(false); //NEGAR CAMPO POR SER INCREMENTAL Y MANEJADO POR LA BASE DE DATOS.
         txtRazsoc.setEnabled(a);
         txtCuit.setEnabled(a);
-        txtFecha.setEnabled(a);
+        jdcFecha.setEnabled(a);
         txtEmail.setEnabled(a);
         txtTel.setEnabled(a);
         txtProv.setEnabled(a);
         txtLoc.setEnabled(a);
-        boxAfip.setEnabled(a);
+        jChkAfip.setEnabled(a);
+        
+        
     }
     public void manejoBotones(boolean a){
         btnNuevo.setEnabled(a);
@@ -485,17 +503,20 @@ public class FrameClientes extends javax.swing.JFrame {
         btnBuscar.setEnabled(a);
         btnEliminar.setEnabled(a);
         btnEditar.setEnabled(a);
+        
     }
 
     public void metodoLimpiar (){
         txtNro.setText("");
         txtRazsoc.setText("");
         txtCuit.setText("");
-        jdcFecha.setDate(2022-01-12);
+        //jdcFecha.setDate(LocalDate());
         txtEmail.setText("");
         txtTel.setText("");
         txtProv.setText("");
         txtLoc.setText("");
-        boxAfip.setSelectedIndex(0);
+        jChkAfip.setEnabled(false);
+        
+        
     }
 }

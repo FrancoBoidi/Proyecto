@@ -2,27 +2,36 @@
 package negocio;
 
 import datos.DatosClientes;
-import datos.Utilitarios;
+import datos.Metodos;
+import igu.FrameClientes;
 import java.sql.Date;
 import javax.swing.table.DefaultTableModel;
 
-/*
-import Datos.Coneccion;
-import Igu.ClientesFrame;
-import javax.swing.table.DefaultTableModel;
 
-*/
+
 
 public class Clientes {
+    
     private int nroCliente;
     private String razonSocial;
-    private int cuit;
+    private String cuit;
     private Date fechadeAlta;
     private String email;
     private String telefono;
     private String provincia;;
     private String localidad;
-    boolean condicionAfip = false;
+    int condicionAfip;
+    
+    public static void main(String[] args){
+        Clientes miCliente = new Clientes();
+        FrameClientes panta = new FrameClientes();
+        panta.setVisible(true);
+        panta.setLocationRelativeTo(null);
+    }
+    
+    public Clientes() {
+        
+    }
 
     public int getNroCliente() {
         return nroCliente;
@@ -40,11 +49,11 @@ public class Clientes {
         this.razonSocial = razonSocial;
     }
 
-    public int getCuit() {
+    public String getCuit() {
         return cuit;
     }
 
-    public void setCuit(int cuit) {
+    public void setCuit(String cuit) {
         this.cuit = cuit;
     }
 
@@ -89,19 +98,18 @@ public class Clientes {
         this.localidad = localidad;
     }
 
-    public boolean isCondicionAfip() {
+    public int isCondicionAfip() {
         return condicionAfip;
     }
 
-    public void setCondicionAfip(boolean condicionAfip) {
+    public void setCondicionAfip(int condicionAfip) {
         this.condicionAfip = condicionAfip;
     }
 
-    public Clientes(int cod, String razsoc, int cuit1, String tel, String email1, String prov, String loc, Date fecha, boolean condicionAfip) {
-    }
+ 
     
     // AGREGAR REGISTROS
-    public Clientes(String razonSocial, int cuit, Date fechadeAlta, String email, String telefono, String Provincia, String Localidad, boolean condicionAfip) {
+    public Clientes(String razonSocial, String cuit, Date fechadeAlta, String email, String telefono, String Provincia, String Localidad, int condicionAfip) {
         this.razonSocial = razonSocial;
         this.cuit = cuit;
         this.fechadeAlta = fechadeAlta;
@@ -113,7 +121,7 @@ public class Clientes {
     }
 
     // MODIFICAR O ACTUALIZAR REGISTROS
-        public Clientes(int nroCliente, String razonSocial, int cuit, Date fechadeAlta, String email, String telefono, String Provincia, String Localidad, boolean condicionAfip) {
+        public Clientes(int nroCliente, String razonSocial, String cuit, Date fechadeAlta, String email, String telefono, String Provincia, String Localidad, int condicionAfip) {
         this.nroCliente = nroCliente;
         this.razonSocial = razonSocial;
         this.cuit = cuit;
@@ -129,19 +137,19 @@ public class Clientes {
     
     // EN EL VIDEO AGREGA UNA CAPA DE LOGICA PERO TENIENDO EN CUENTA LAS 3 CAPAS NOMBRADAS POR EL PROFESOR Y LA FUNCIONALIDAD DE LA CLASE, SERIA CRRECTO AGREGARLO ACA
     DatosClientes obj = new DatosClientes();
-    Utilitarios uti = new Utilitarios();
+    Metodos uti = new Metodos();
     
-    public void agregar(String razsoc, int cuit, String tel, String email, String prov, 
-            String loc, Date fecha,boolean condicion ) {
+    public void agregar(String razsoc, String cuit,Date fecha, String tel, String email, String prov, 
+            String loc, int condicion ) {
         if(obj.agregar(new Clientes(razsoc,cuit, fecha,tel,email,prov,loc, condicion))){
             uti.msj("Dato Agregado", 1);
         }
             
 }
  
-     public void actualizar(int cod, String razsoc, int cuit, String tel, String email, String prov, 
-            String loc, Date fecha, boolean condicion) {
-         if (obj.actualizar(new Clientes (cod,razsoc,cuit,tel,email,prov,loc, fecha, condicion))){
+     public void actualizar(int cod, String razsoc, String cuit,Date fecha, String tel, String email, String prov, 
+            String loc, int condicion) {
+         if (obj.actualizar(new Clientes (cod,razsoc,cuit,fecha,tel,email,prov,loc, condicion))){
              uti.msj("Registro Actualizado", 1);
          }
      }

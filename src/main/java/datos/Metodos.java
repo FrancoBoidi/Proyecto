@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
  *
  * @author franc
  */
-public class Utilitarios {
+public class Metodos {
     public void msj(String m, int i) {
         JOptionPane.showMessageDialog(null,m,"Proyecto",i);
         

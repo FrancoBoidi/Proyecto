@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
 public class DatosClientes implements InterfazClientes <Clientes> {
 
     Connection con = new ConeccionBdd().getCn();
-    Utilitarios uti= new Utilitarios();
+    Metodos uti= new Metodos();
     
     
     
@@ -27,15 +27,15 @@ public class DatosClientes implements InterfazClientes <Clientes> {
         try {
             CallableStatement cs = con.prepareCall("{call ALTACLIENTE (?,?,?,?,?,?,?,?,?}");
             cs.setString(1, obj.getRazonSocial());
-            cs.setInt(2, obj.getCuit());
+            cs.setString(2, obj.getCuit());
             cs.setDate(3,obj.getFechadeAlta());
             cs.setString(4, obj.getEmail());
             cs.setString(5, obj.getTelefono());
             cs.setString(6, obj.getProvincia());
             cs.setString(7, obj.getLocalidad());
-            cs.setBoolean(8, obj.isCondicionAfip());
+            cs.setInt(8, obj.isCondicionAfip());
             
-            //VERFIFICAR CARGA DEL REGISTRO
+            //VERFIFICAR CARGA DEL REGISTRO A TRAVES DE EXECUTE UPDATE
             if(cs.executeUpdate()>0)
                 bandera=true;
                 
@@ -54,13 +54,13 @@ public class DatosClientes implements InterfazClientes <Clientes> {
             
             cs.setInt(1, obj.getNroCliente());
             cs.setString(2, obj.getRazonSocial());
-            cs.setInt(3, obj.getCuit());
+            cs.setString(3, obj.getCuit());
             cs.setDate(4,obj.getFechadeAlta());
             cs.setString(5, obj.getEmail());
             cs.setString(6, obj.getTelefono());
             cs.setString(7, obj.getProvincia());
             cs.setString(8, obj.getLocalidad());
-            cs.setBoolean(10,obj.isCondicionAfip());
+            cs.setInt(10,obj.isCondicionAfip());
             
             
             //VERFIFICAR CARGA DEL REGISTRO
@@ -116,7 +116,8 @@ public class DatosClientes implements InterfazClientes <Clientes> {
             ResultSet rs= cs.executeQuery();
             
             //CREAMOS LAS FILAS PARA LA TABLA CLIENTES
-            //LA VARIABLE NEXT GENERA QUE EN EL BUCLE SE PASE DE UNREGISTRO AL SIGUIENTE. ENTONCES SIGNIFICA QUE SI MIENTRAS HAYA PROXIMA FILA, SIGUE EJECUTANDO
+            /*LA VARIABLE NEXT GENERA QUE EN EL BUCLE SE PASE DE UN REGISTRO AL SIGUIENTE. 
+            ENTONCES SIGNIFICA QUE SI MIENTRAS HAYA PROXIMA FILA, SIGUE EJECUTANDO*/
             
             while (rs.next()){
                 Object data[]={rs.getString(1), rs.getString(2),
@@ -124,6 +125,7 @@ public class DatosClientes implements InterfazClientes <Clientes> {
                                rs.getString(5), rs.getString(6),
                                rs.getString(7), rs.getString(8),
                                rs.getString(9)};
+                //CARGAR LAS FILAS DENTRO DE LAS COMLUMNAS
                 tabla.addRow(data);
                 
             }
