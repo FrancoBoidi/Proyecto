@@ -8,34 +8,56 @@ import javax.swing.JOptionPane;
 
 public class ConeccionBdd {
     
-    Connection con = null;
-    Metodos uti = new Metodos();
+    Connection con;
+   
+    private static final String driver= "com.mysql.jdbc.Driver";
+    private static final String usuario= "root";
+    private static final String password="francoboidi1";
     
     
-    private static String driver= "com.mysql.jdbc.Driver";
-    private static String usuario= "root";
-    private static String password="francoboidi1";
-    private static String url="jdbc:mysql://localhost:3306/proyecto?useSSL=false&useTimezone=true&serverTimezone=UTC&allowPublicKeyRetrieval=true";
-    
-    static{
+    public static Connection getConnection(String url) throws SQLException {
+        return DriverManager.getConnection(url,usuario,password);
+    }
+    /*public  ConeccionBdd () {
         try{
-            Class.forName(driver);
-            //se debe registrar ese driver ya que es una version nueva de SQL y solicita mas requerimientos   
+            con= DriverManager.getConnection(url,usuario,password);  
         }catch (Exception ex) {
             //System.out.print("Error en la conexion" + e);
             JOptionPane.showMessageDialog(null,ex.toString(),"Proyecto",0);
+            uti.msj(ex.toString(), 0);
             
         }
         
+    
     }
     
-    public Connection getCn(){
+    public  Connection getCn(){
         try{
             con=DriverManager.getConnection(url, usuario, password);
             
         }catch (Exception ex) {
             uti.msj(ex.toString(), 0);
         }
-        return con;
-    }
+        return con;*/
+   
+        public static boolean agregar(PreparedStatement ps) throws SQLException {
+            ps.executeUpdate();
+        
+            return true;
+        }
+        public static boolean actualizar(PreparedStatement ps) throws SQLException {
+            ps.executeUpdate();
+        
+            return true;
+        }
+         public static boolean eliminar (PreparedStatement ps) throws SQLException {
+            ps.executeUpdate();
+        
+            return true;
+        }
+        public static ResultSet lista (PreparedStatement ps) throws SQLException {
+            ResultSet rs= ps.executeQuery();
+        
+            return rs;
+        }
 }

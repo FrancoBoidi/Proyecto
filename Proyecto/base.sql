@@ -62,4 +62,6 @@ SELECT * FROM clientes;
 END //
 DELIMITER ;
 
+ALTER TABLE clientes MODIFY condicionAfip SMALLINT;
+ALTER TABLE clientes	MODIFY condicionAfip BOOLEAN;
 

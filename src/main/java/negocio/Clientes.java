@@ -1,10 +1,21 @@
 
 package negocio;
 
+import datos.ConeccionBdd;
+import static datos.ConeccionBdd.getConnection;
 import datos.DatosClientes;
 import datos.Metodos;
 import igu.FrameClientes;
+import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Vector;
+
 import javax.swing.table.DefaultTableModel;
 
 
@@ -12,22 +23,17 @@ import javax.swing.table.DefaultTableModel;
 
 public class Clientes {
     
-    private int nroCliente;
-    private String razonSocial;
-    private String cuit;
-    private Date fechadeAlta;
-    private String email;
-    private String telefono;
-    private String provincia;;
-    private String localidad;
-    int condicionAfip;
+    protected int nroCliente;
+    protected String razonSocial;
+    protected String cuit;
+    protected Date fechadeAlta;
+    protected String email;
+    protected String telefono;
+    protected String provincia;;
+    protected String localidad;
+    protected boolean condicionAfip;
     
-    public static void main(String[] args){
-        Clientes miCliente = new Clientes();
-        FrameClientes panta = new FrameClientes();
-        panta.setVisible(true);
-        panta.setLocationRelativeTo(null);
-    }
+    
     
     public Clientes() {
         
@@ -98,18 +104,18 @@ public class Clientes {
         this.localidad = localidad;
     }
 
-    public int isCondicionAfip() {
+    public boolean isCondicionAfip() {
         return condicionAfip;
     }
 
-    public void setCondicionAfip(int condicionAfip) {
+    public void setCondicionAfip(boolean condicionAfip) {
         this.condicionAfip = condicionAfip;
     }
 
  
     
     // AGREGAR REGISTROS
-    public Clientes(String razonSocial, String cuit, Date fechadeAlta, String email, String telefono, String Provincia, String Localidad, int condicionAfip) {
+    public Clientes(String razonSocial, String cuit, Date fechadeAlta, String email, String telefono, String Provincia, String Localidad, boolean condicionAfip) {
         this.razonSocial = razonSocial;
         this.cuit = cuit;
         this.fechadeAlta = fechadeAlta;
@@ -121,8 +127,8 @@ public class Clientes {
     }
 
     // MODIFICAR O ACTUALIZAR REGISTROS
-        public Clientes(int nroCliente, String razonSocial, String cuit, Date fechadeAlta, String email, String telefono, String Provincia, String Localidad, int condicionAfip) {
-        this.nroCliente = nroCliente;
+        public Clientes(int nro, String razonSocial, String cuit, Date fechadeAlta, String email, String telefono, String Provincia, String Localidad, boolean condicionAfip) {
+        this.nroCliente = nro;
         this.razonSocial = razonSocial;
         this.cuit = cuit;
         this.fechadeAlta = fechadeAlta;
@@ -132,37 +138,135 @@ public class Clientes {
         this.localidad = Localidad;
         this.condicionAfip = condicionAfip;
     }
-
+        //ELIMINAR REGISTROS
+        public Clientes (int nro){
+            this.nroCliente = nro;
+        }
+        
+        /*LEER DATOS
+        
+        public Clientes(int nro, String razonSocial, String cuit, Date fechadeAlta, String email, String telefono, String Provincia, String Localidad, boolean condicionAfip) {
+        this.nroCliente = nro;
+        this.razonSocial = razonSocial;
+        this.cuit = cuit;
+        this.fechadeAlta = fechadeAlta;
+        this.email = email;
+        this.telefono = telefono;
+        this.provincia = Provincia;
+        this.localidad = Localidad;
+        this.condicionAfip = condicionAfip;
+        
+        */
 
     
-    // EN EL VIDEO AGREGA UNA CAPA DE LOGICA PERO TENIENDO EN CUENTA LAS 3 CAPAS NOMBRADAS POR EL PROFESOR Y LA FUNCIONALIDAD DE LA CLASE, SERIA CRRECTO AGREGARLO ACA
-    DatosClientes obj = new DatosClientes();
-    Metodos uti = new Metodos();
+    private static final String url="jdbc:mysql://localhost:3306/proyecto?useSSL=false&useTimezone=true&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     
-    public void agregar(String razsoc, String cuit,Date fecha, String tel, String email, String prov, 
-            String loc, int condicion ) {
-        if(obj.agregar(new Clientes(razsoc,cuit, fecha,tel,email,prov,loc, condicion))){
-            uti.msj("Dato Agregado", 1);
+    
+    //ConeccionBdd conec = new ConeccionBdd();
+    
+    public static void agregar(Clientes clientes ) throws ParseException {
+          Connection con= null;
+          PreparedStatement ps = null;
+          try {
+            con = getConnection(url);
+            ps = con.prepareStatement("INSERT INTO clientes (razonSocial,cuit,fechadeAlta,email,telefono,provincia,localidad,condicionAfip) VALUES (?,?,?,?,?,?,?,?)");
+            ps.setString(1, clientes.getRazonSocial());
+            ps.setString(2, clientes.getCuit());
+            ps.setDate(3,clientes.getFechadeAlta());
+            ps.setString(4, clientes.getEmail());
+            ps.setString(5, clientes.getTelefono());
+            ps.setString(6, clientes.getProvincia());
+            ps.setString(7, clientes.getLocalidad());
+            ps.setBoolean(8, clientes.isCondicionAfip());
+            
+            boolean ejecutar = ConeccionBdd.agregar(ps);
+            
+          } catch ( SQLException ex){
+            ex.printStackTrace(System.out);
+            
         }
             
 }
  
-     public void actualizar(int cod, String razsoc, String cuit,Date fecha, String tel, String email, String prov, 
-            String loc, int condicion) {
-         if (obj.actualizar(new Clientes (cod,razsoc,cuit,fecha,tel,email,prov,loc, condicion))){
-             uti.msj("Registro Actualizado", 1);
-         }
+     public static void actualizar(Clientes clientes) {
+          Connection con= null;
+          PreparedStatement ps = null;
+          
+          try {
+            con = getConnection(url);
+            ps = con.prepareStatement("UPDATE clientes SET razonSocial = ?,cuit = ?,email = ?,telefono = ?,provincia = ?,localidad = ?,condicionAfip = ? WHERE nroClientes = ?");
+            
+            
+            ps.setString(1, clientes.getRazonSocial());
+            ps.setString(2, clientes.getCuit());
+            ps.setString(3, clientes.getEmail());
+            ps.setString(4, clientes.getTelefono());
+            ps.setString(5, clientes.getProvincia());
+            ps.setString(6, clientes.getLocalidad());
+            ps.setBoolean(7, clientes.isCondicionAfip());
+            ps.setInt(8, clientes.getNroCliente());
+            
+            boolean ejecutar = ConeccionBdd.actualizar(ps);
+          
+         } catch ( SQLException ex){
+            ex.printStackTrace(System.out);
+            
+        }
      }
      
-     public void eliminar(int codigo){
-         if(obj.eliminar(codigo)){
-             uti.msj("Registro Eliminado", 1);
-         }
+     public static void eliminar(Clientes clientes){
+         
+         Connection con= null;
+         PreparedStatement ps = null;
+         
+         try {
+            con = getConnection(url);
+            ps = con.prepareStatement("DELETE FROM clientes WHERE nroClientes = ?");
+            ps.setInt(1, clientes.getNroCliente());
+         
+            boolean ejecutar = ConeccionBdd.eliminar(ps);
+         
+         }catch ( SQLException ex){
+            ex.printStackTrace(System.out);
      }
-    
-     public DefaultTableModel lista() {
-         return obj.lista();
      }
+     public static ArrayList<Clientes> listar() {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Clientes clientes = null;
+        ArrayList listaClientes = new ArrayList<>();
+        
+        try{
+            con = getConnection(url);
+            ps= con.prepareStatement("SELECT nroClientes, razonSocial, cuit, fechadeAlta, email, telefono, provincia, localidad, condicionAfip FROM clientes");
+            rs= ConeccionBdd.lista(ps);
+            
+            while (rs.next()){
+                int nroClientes = rs.getInt ("nroClientes");
+                String razonSocial = rs.getString ("razonSocial");
+                String cuit = rs.getString ("cuit");
+                Date fechadeAlta = rs.getDate("fechadeAlta");
+                String email = rs.getString ("email");
+                String telefono = rs.getString ("telefono");
+                String provincia = rs.getString ("provincia");
+                String localidad = rs.getString ("localidad");
+                boolean condicionAfip = rs.getBoolean("condicionAfip");
+                
+                clientes = new Clientes (nroClientes,razonSocial,cuit,fechadeAlta,email,telefono,provincia,localidad,condicionAfip);
+                
+                listaClientes.add(clientes);
+            }
+            
+            
+        } catch ( SQLException ex){
+            ex.printStackTrace(System.out);
+            
+        
+        
+     }
+        return listaClientes;
+    }
 }
     
     

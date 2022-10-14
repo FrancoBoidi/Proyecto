@@ -8,49 +8,35 @@ import negocio.Clientes;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author franc
  */
-public class DatosClientes implements InterfazClientes <Clientes> {
-
+public class DatosClientes {
+/*
     Connection con = new ConeccionBdd().getCn();
     Metodos uti= new Metodos();
     
     
     
-    @Override
-    public boolean agregar(Clientes obj) {
-        boolean bandera = false;
-        try {
-            CallableStatement cs = con.prepareCall("{call ALTACLIENTE (?,?,?,?,?,?,?,?,?}");
-            cs.setString(1, obj.getRazonSocial());
-            cs.setString(2, obj.getCuit());
-            cs.setDate(3,obj.getFechadeAlta());
-            cs.setString(4, obj.getEmail());
-            cs.setString(5, obj.getTelefono());
-            cs.setString(6, obj.getProvincia());
-            cs.setString(7, obj.getLocalidad());
-            cs.setInt(8, obj.isCondicionAfip());
-            
-            //VERFIFICAR CARGA DEL REGISTRO A TRAVES DE EXECUTE UPDATE
-            if(cs.executeUpdate()>0)
-                bandera=true;
-                
-        } catch (Exception ex){
-            uti.msj(ex.toString(), 0);
-            
+    
+    public static boolean agregar(CallableStatement cs) throws SQLException {
+       cs.executeUpdate();
+        
+            return true;
+      
         }
-        return bandera;
+       
     }
 
-    @Override
+
     public boolean actualizar(Clientes obj) {
                 boolean bandera = false;
         try {
-            CallableStatement cs = con.prepareCall("{call ACTUALIZAR_CLIENTE (?,?,?,?,?,?,?,?,?,?}");
+            CallableStatement cs = con.prepareCall("{call ACTUALIZAR_CLIENTE (?,?,?,?,?,?,?,?,?)}");
             
             cs.setInt(1, obj.getNroCliente());
             cs.setString(2, obj.getRazonSocial());
@@ -60,7 +46,7 @@ public class DatosClientes implements InterfazClientes <Clientes> {
             cs.setString(6, obj.getTelefono());
             cs.setString(7, obj.getProvincia());
             cs.setString(8, obj.getLocalidad());
-            cs.setInt(10,obj.isCondicionAfip());
+            cs.setBoolean(9,obj.isCondicionAfip());
             
             
             //VERFIFICAR CARGA DEL REGISTRO
@@ -76,15 +62,16 @@ public class DatosClientes implements InterfazClientes <Clientes> {
     }
 
     @Override
-    public boolean eliminar(int codigo) {//VER SI SE UTILIZA CODIGO O NUMERO DE CLIENTE
+    public boolean eliminar(int nroCliente) {//VER SI SE UTILIZA CODIGO O NUMERO DE CLIENTE
               boolean bandera = false;
         try {
             CallableStatement cs = con.prepareCall("{call ELIMINAR_CLIENTE (?)}");
-            cs.setInt(1,codigo);
-            
+            cs.setInt(1,nroCliente);
+            cs.execute();
+            bandera=true;
             
             //VERFIFICAR CARGA DEL REGISTRO
-            if(cs.executeUpdate()>0)
+           if(cs.executeUpdate()>0)
                 bandera=true;
                 
         } catch (Exception ex){
@@ -118,7 +105,7 @@ public class DatosClientes implements InterfazClientes <Clientes> {
             //CREAMOS LAS FILAS PARA LA TABLA CLIENTES
             /*LA VARIABLE NEXT GENERA QUE EN EL BUCLE SE PASE DE UN REGISTRO AL SIGUIENTE. 
             ENTONCES SIGNIFICA QUE SI MIENTRAS HAYA PROXIMA FILA, SIGUE EJECUTANDO*/
-            
+            /*
             while (rs.next()){
                 Object data[]={rs.getString(1), rs.getString(2),
                                rs.getString(3), rs.getString(4),
@@ -137,5 +124,5 @@ public class DatosClientes implements InterfazClientes <Clientes> {
         
     }
     
-    
+    */
 }

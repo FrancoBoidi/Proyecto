@@ -7,20 +7,37 @@ package igu;
 
 import negocio.Clientes;
 import java.sql.Date;
+import static java.sql.Date.valueOf;
+import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import javax.swing.JTextField;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 
 public class FrameClientes extends javax.swing.JFrame {
-    Clientes obj = new Clientes();
+    
     boolean bandera=false;
     
-    /**
-     * Creates new form Clientes
-     */
+    private void listarTablaClientes (ArrayList<negocio.Clientes> listaClientes){
+        listaClientes.forEach(clientes -> {
+            DefaultTableModel lista = (DefaultTableModel)TblCliente.getModel();
+            lista.addRow(new Object[]{clientes.getNroCliente(),clientes.getRazonSocial(),clientes.getCuit(),clientes.getFechadeAlta(),clientes.getEmail(),clientes.getTelefono(),clientes.getProvincia(),clientes.getLocalidad(),clientes.isCondicionAfip()});
+       
+        });
+    }
+    private void limpiarTablaClientes (){
+        DefaultTableModel lista = (DefaultTableModel)TblCliente.getModel();
+        lista.setRowCount(0);
+    }
     public FrameClientes() {
         initComponents();
-        
+        listarTablaClientes(Clientes.listar());
+        txtNro.setEnabled(false);
+        manejoCajas(false);
+        manejoBotones(true);
     }
 
     /**
@@ -94,32 +111,54 @@ public class FrameClientes extends javax.swing.JFrame {
 
         TblCliente.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {},
-                {},
-                {},
-                {}
+
             },
             new String [] {
-
+                "Nro. Cliente", "Razon Social", "Cuit", "Fecha de Alta", "Email", "Tel.", "Provincia", "Localidad", "Cond. Afip"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Byte.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true, true, true, true, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        TblCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TblClienteMouseClicked(evt);
+            }
+        });
+        TblCliente.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                TblClientePropertyChange(evt);
+            }
+        });
         jScrollPane1.setViewportView(TblCliente);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 738, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(92, 92, 92))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 766, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(14, 14, 14)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(851, Short.MAX_VALUE))
         );
 
         FormCliente.addTab("TABLA", jPanel1);
@@ -150,7 +189,6 @@ public class FrameClientes extends javax.swing.JFrame {
             }
         });
 
-        txtNro.setEditable(false);
         txtNro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNroActionPerformed(evt);
@@ -160,6 +198,11 @@ public class FrameClientes extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Funciones"));
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         btnEditar.setText("Editar");
         btnEditar.addActionListener(new java.awt.event.ActionListener() {
@@ -202,9 +245,9 @@ public class FrameClientes extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap(62, Short.MAX_VALUE)
-                .addComponent(btnNuevo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnGuardar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnNuevo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnBuscar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -305,14 +348,14 @@ public class FrameClientes extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(198, Short.MAX_VALUE))
+                .addContainerGap(140, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(48, 48, 48)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(871, Short.MAX_VALUE))
         );
 
         FormCliente.addTab("FORMULARIO", jPanel3);
@@ -323,32 +366,28 @@ public class FrameClientes extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 817, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(42, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(FormCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 722, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27))
+                .addGap(37, 37, 37))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
+                .addGap(78, 78, 78)
                 .addComponent(FormCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(549, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        TblCliente.setModel(obj.lista());
-        manejoCajas(false);
-        manejoBotones(true);
-        
-        
+    
     }//GEN-LAST:event_formWindowOpened
 
     private void txtRazsocActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRazsocActionPerformed
@@ -360,6 +399,8 @@ public class FrameClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNroActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+           
+           
            String nom=txtRazsoc.getText();
            String cuit=txtCuit.getText();
            SimpleDateFormat formatoFecha = new SimpleDateFormat ("yyyy-MM-dd");
@@ -368,27 +409,38 @@ public class FrameClientes extends javax.swing.JFrame {
            String tel=txtTel.getText();
            String prov=txtProv.getText();
            String loc=txtLoc.getText();
-           int afip;
+           
+           Boolean afip = (Boolean)jChkAfip.isSelected();
            if (jChkAfip.isSelected()==true){
-               afip=1;
+               afip=true;
            }else {
-               afip=0;
+               afip=false;
            }
                
            
-           //UTILIZAR BANDERAS PARA DETERMINAR SI LO QUE SE QUIERE GUARDAR ES EDITADO O NUEVO
-           if(bandera==true)
-           {
+           if (bandera){
+           
                //GUARDAR UN CLIENTE NUEVO
                
-               obj.agregar(nom, cuit, Date.valueOf(fecha), email, tel, prov, loc,afip);
+               Clientes clientes = new Clientes(nom, cuit, Date.valueOf(fecha), email, tel, prov, loc,afip);
+               try {
+                  Clientes.agregar(clientes);
+                } catch (ParseException ex) {
+                    Logger.getLogger(FrameClientes.class.getName()).log(Level.SEVERE, null, ex);
+                }
+               //EDITAR CLIENTE
            }else{
-               // ACTUALIZAR O EDITAR UN CLIENTE
-               int nro=Integer.valueOf(txtNro.getText());
-               obj.actualizar(nro, nom, cuit,Date.valueOf(fecha),  email, tel, prov, loc,afip); 
+               int nfila = TblCliente.getSelectedRow();
+               int nro = (int) TblCliente.getValueAt(nfila, 0);
+               Clientes clientes = new Clientes(nro, nom, cuit,Date.valueOf(fecha),  email, tel, prov, loc,afip);
+               Clientes.actualizar(clientes);
            }
+          
+             
+               
            
-           TblCliente.setModel(obj.lista());
+           limpiarTablaClientes();
+           listarTablaClientes(Clientes.listar());
            
            manejoCajas(false);
            manejoBotones(true);
@@ -399,7 +451,8 @@ public class FrameClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        bandera=true;
+        //REALIZAR BANDERA EN NUEVO Y EDITAR, CON EL OBJETIVO DE QUE EL BOTON GUARDAR SEPA SI ESTA CREANDO UN REGISTRO NUEVO O SOLO ESTÁ EDTIANDO UN REGISTRO
+        bandera= true;
         manejoCajas(true);
         manejoBotones(false);
         
@@ -407,13 +460,89 @@ public class FrameClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        bandera=false;
+        
+        
+        bandera= false;
+        manejoCajas(true);
+        txtNro.setEnabled(false);
+        manejoBotones(false);
+        TblCliente.setEnabled(false);
+        
+        int nfila = TblCliente.getSelectedRow();
+        
+            txtRazsoc.setText((String)TblCliente.getValueAt(nfila, 1));
+            txtCuit.setText((String)TblCliente.getValueAt(nfila, 2));
+            jdcFecha.setDate((java.sql.Date) TblCliente.getValueAt(nfila, 3));
+            txtEmail.setText((String)TblCliente.getValueAt(nfila, 4));
+            txtTel.setText((String)TblCliente.getValueAt(nfila,5));
+            txtProv.setText((String)TblCliente.getValueAt(nfila, 6));
+            txtLoc.setText((String)TblCliente.getValueAt(nfila, 7));
+            jChkAfip.setSelected((Boolean)TblCliente.getValueAt(nfila, 8));
+        
+        /*String nro = Integer.valueOf(txtNro.getText());
+        String nom=txtRazsoc.getText();
+        String cuit=txtCuit.getText();
+        SimpleDateFormat formatoFecha = new SimpleDateFormat ("yyyy-MM-dd");
+        String fecha = formatoFecha.format(jdcFecha.getDate());
+        String email=txtEmail.getText();
+        String tel=txtTel.getText();
+        String prov=txtProv.getText();
+        String loc=txtLoc.getText();
+        Boolean afip=Boolean.valueOf(jChkAfip.isSelected());
+        if (jChkAfip.isSelected()==true){
+            afip=true;
+        }else {
+            afip=false;
+        }
+        
+          // ACTUALIZAR O EDITAR UN CLIENTE
+               int filaSeleccionada = TblCliente.getSelectedRow();
+               int nro = (int) (TblCliente.getValueAt(filaSeleccionada, 0));
+               Clientes Clientes = new Clientes(nro, nom, cuit,Date.valueOf(fecha),  email, tel, prov, loc,afip);
+               Clientes.actualizar(Clientes);*/
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+
+        manejoBotones(false);
+        btnEliminar.setEnabled(true);
+        btnGuardar.setEnabled(false);
+        int nfila = TblCliente.getSelectedRow();
+        int id = (int) TblCliente.getValueAt(nfila, 0);
+        
+        Clientes clientes = new Clientes(id);
+        Clientes.eliminar(clientes);
+        
+        limpiarTablaClientes();
+        listarTablaClientes(Clientes.listar());
+         
+        manejoBotones(true);
+        
+        
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void TblClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TblClienteMouseClicked
+     
+    }//GEN-LAST:event_TblClienteMouseClicked
+
+    private void TblClientePropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_TblClientePropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TblClientePropertyChange
 
     /**
      * @param args the command line arguments
      */
-    public static void on () {
+    public static void main(String[] args){
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -505,6 +634,7 @@ public class FrameClientes extends javax.swing.JFrame {
         btnEditar.setEnabled(a);
         
     }
+   
 
     public void metodoLimpiar (){
         txtNro.setText("");
@@ -519,4 +649,17 @@ public class FrameClientes extends javax.swing.JFrame {
         
         
     }
+    /*
+    public void columnas (){
+        DefaultTableModel tabla = (DefaultTableModel) TblCliente.getModel();
+        /*tabla.addColumn("Num Cliente");
+        tabla.addColumn("Razon social");
+        tabla.addColumn("Cuit");
+        tabla.addColumn("Fecha de Alta");
+        tabla.addColumn("Email");
+        tabla.addColumn("Telefono");
+        tabla.addColumn("Provincia");
+        tabla.addColumn("Localidad");
+        tabla.addColumn("Condición en Afip");
+    }*/
 }
