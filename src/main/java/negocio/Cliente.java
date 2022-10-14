@@ -5,7 +5,7 @@ import datos.ConeccionBdd;
 import static datos.ConeccionBdd.getConnection;
 import datos.DatosClientes;
 import datos.Metodos;
-import igu.FrameClientes;
+import igu.FrameCliente;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
@@ -21,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
 
 
 
-public class Clientes {
+public class Cliente {
     
     protected int nroCliente;
     protected String razonSocial;
@@ -35,7 +35,7 @@ public class Clientes {
     
     
     
-    public Clientes() {
+    public Cliente() {
         
     }
 
@@ -115,7 +115,7 @@ public class Clientes {
  
     
     // AGREGAR REGISTROS
-    public Clientes(String razonSocial, String cuit, Date fechadeAlta, String email, String telefono, String Provincia, String Localidad, boolean condicionAfip) {
+    public Cliente(String razonSocial, String cuit, Date fechadeAlta, String email, String telefono, String Provincia, String Localidad, boolean condicionAfip) {
         this.razonSocial = razonSocial;
         this.cuit = cuit;
         this.fechadeAlta = fechadeAlta;
@@ -127,7 +127,7 @@ public class Clientes {
     }
 
     // MODIFICAR O ACTUALIZAR REGISTROS
-        public Clientes(int nro, String razonSocial, String cuit, Date fechadeAlta, String email, String telefono, String Provincia, String Localidad, boolean condicionAfip) {
+        public Cliente(int nro, String razonSocial, String cuit, Date fechadeAlta, String email, String telefono, String Provincia, String Localidad, boolean condicionAfip) {
         this.nroCliente = nro;
         this.razonSocial = razonSocial;
         this.cuit = cuit;
@@ -139,13 +139,13 @@ public class Clientes {
         this.condicionAfip = condicionAfip;
     }
         //ELIMINAR REGISTROS
-        public Clientes (int nro){
+        public Cliente (int nro){
             this.nroCliente = nro;
         }
         
         /*LEER DATOS
         
-        public Clientes(int nro, String razonSocial, String cuit, Date fechadeAlta, String email, String telefono, String Provincia, String Localidad, boolean condicionAfip) {
+        public Cliente(int nro, String razonSocial, String cuit, Date fechadeAlta, String email, String telefono, String Provincia, String Localidad, boolean condicionAfip) {
         this.nroCliente = nro;
         this.razonSocial = razonSocial;
         this.cuit = cuit;
@@ -162,9 +162,9 @@ public class Clientes {
     private static final String url="jdbc:mysql://localhost:3306/proyecto?useSSL=false&useTimezone=true&serverTimezone=UTC&allowPublicKeyRetrieval=true";
     
     
-    //ConeccionBdd conec = new ConeccionBdd();
     
-    public static void agregar(Clientes clientes ) throws ParseException {
+    
+    public static void agregar(Cliente clientes ) throws ParseException {
           Connection con= null;
           PreparedStatement ps = null;
           try {
@@ -188,7 +188,7 @@ public class Clientes {
             
 }
  
-     public static void actualizar(Clientes clientes) {
+     public static void actualizar(Cliente clientes) {
           Connection con= null;
           PreparedStatement ps = null;
           
@@ -214,7 +214,7 @@ public class Clientes {
         }
      }
      
-     public static void eliminar(Clientes clientes){
+     public static void eliminar(Cliente clientes){
          
          Connection con= null;
          PreparedStatement ps = null;
@@ -230,11 +230,11 @@ public class Clientes {
             ex.printStackTrace(System.out);
      }
      }
-     public static ArrayList<Clientes> listar() {
+     public static ArrayList<Cliente> listar() {
         Connection con = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Clientes clientes = null;
+        Cliente clientes = null;
         ArrayList listaClientes = new ArrayList<>();
         
         try{
@@ -253,7 +253,7 @@ public class Clientes {
                 String localidad = rs.getString ("localidad");
                 boolean condicionAfip = rs.getBoolean("condicionAfip");
                 
-                clientes = new Clientes (nroClientes,razonSocial,cuit,fechadeAlta,email,telefono,provincia,localidad,condicionAfip);
+                clientes = new Cliente (nroClientes,razonSocial,cuit,fechadeAlta,email,telefono,provincia,localidad,condicionAfip);
                 
                 listaClientes.add(clientes);
             }

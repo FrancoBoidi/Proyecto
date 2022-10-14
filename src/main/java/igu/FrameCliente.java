@@ -5,7 +5,7 @@
 package igu;
 
 
-import negocio.Clientes;
+import negocio.Cliente;
 import java.sql.Date;
 import static java.sql.Date.valueOf;
 import java.sql.SQLException;
@@ -17,11 +17,11 @@ import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 
 
-public class FrameClientes extends javax.swing.JFrame {
+public class FrameCliente extends javax.swing.JFrame {
     
     boolean bandera=false;
     
-    private void listarTablaClientes (ArrayList<negocio.Clientes> listaClientes){
+    private void listarTablaClientes (ArrayList<negocio.Cliente> listaClientes){
         listaClientes.forEach(clientes -> {
             DefaultTableModel lista = (DefaultTableModel)TblCliente.getModel();
             lista.addRow(new Object[]{clientes.getNroCliente(),clientes.getRazonSocial(),clientes.getCuit(),clientes.getFechadeAlta(),clientes.getEmail(),clientes.getTelefono(),clientes.getProvincia(),clientes.getLocalidad(),clientes.isCondicionAfip()});
@@ -32,9 +32,9 @@ public class FrameClientes extends javax.swing.JFrame {
         DefaultTableModel lista = (DefaultTableModel)TblCliente.getModel();
         lista.setRowCount(0);
     }
-    public FrameClientes() {
+    public FrameCliente() {
         initComponents();
-        listarTablaClientes(Clientes.listar());
+        listarTablaClientes(Cliente.listar());
         txtNro.setEnabled(false);
         manejoCajas(false);
         manejoBotones(true);
@@ -422,25 +422,26 @@ public class FrameClientes extends javax.swing.JFrame {
            
                //GUARDAR UN CLIENTE NUEVO
                
-               Clientes clientes = new Clientes(nom, cuit, Date.valueOf(fecha), email, tel, prov, loc,afip);
+               Cliente clientes = new Cliente(nom, cuit, Date.valueOf(fecha), email, tel, prov, loc,afip);
                try {
-                  Clientes.agregar(clientes);
+                  Cliente.agregar(clientes);
                 } catch (ParseException ex) {
-                    Logger.getLogger(FrameClientes.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(FrameCliente.class.getName()).log(Level.SEVERE, null, ex);
                 }
+               //EDITAR CLIENTE
                //EDITAR CLIENTE
            }else{
                int nfila = TblCliente.getSelectedRow();
                int nro = (int) TblCliente.getValueAt(nfila, 0);
-               Clientes clientes = new Clientes(nro, nom, cuit,Date.valueOf(fecha),  email, tel, prov, loc,afip);
-               Clientes.actualizar(clientes);
+               Cliente clientes = new Cliente(nro, nom, cuit,Date.valueOf(fecha),  email, tel, prov, loc,afip);
+               Cliente.actualizar(clientes);
            }
           
              
                
            
            limpiarTablaClientes();
-           listarTablaClientes(Clientes.listar());
+           listarTablaClientes(Cliente.listar());
            
            manejoCajas(false);
            manejoBotones(true);
@@ -498,8 +499,8 @@ public class FrameClientes extends javax.swing.JFrame {
           // ACTUALIZAR O EDITAR UN CLIENTE
                int filaSeleccionada = TblCliente.getSelectedRow();
                int nro = (int) (TblCliente.getValueAt(filaSeleccionada, 0));
-               Clientes Clientes = new Clientes(nro, nom, cuit,Date.valueOf(fecha),  email, tel, prov, loc,afip);
-               Clientes.actualizar(Clientes);*/
+               Cliente Cliente = new Cliente(nro, nom, cuit,Date.valueOf(fecha),  email, tel, prov, loc,afip);
+               Cliente.actualizar(Cliente);*/
         
         
         
@@ -520,11 +521,11 @@ public class FrameClientes extends javax.swing.JFrame {
         int nfila = TblCliente.getSelectedRow();
         int id = (int) TblCliente.getValueAt(nfila, 0);
         
-        Clientes clientes = new Clientes(id);
-        Clientes.eliminar(clientes);
+        Cliente clientes = new Cliente(id);
+        Cliente.eliminar(clientes);
         
         limpiarTablaClientes();
-        listarTablaClientes(Clientes.listar());
+        listarTablaClientes(Cliente.listar());
          
         manejoBotones(true);
         
@@ -556,14 +557,18 @@ public class FrameClientes extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrameClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrameCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrameClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrameCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrameClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrameCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrameClientes.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FrameCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -572,7 +577,7 @@ public class FrameClientes extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrameClientes().setVisible(true);
+                new FrameCliente().setVisible(true);
             }
         });
     }

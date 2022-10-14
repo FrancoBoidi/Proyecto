@@ -4,7 +4,7 @@
  */
 package datos;
 
-import negocio.Clientes;
+import negocio.Cliente;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -33,7 +33,7 @@ public class DatosClientes {
     }
 
 
-    public boolean actualizar(Clientes obj) {
+    public boolean actualizar(Cliente obj) {
                 boolean bandera = false;
         try {
             CallableStatement cs = con.prepareCall("{call ACTUALIZAR_CLIENTE (?,?,?,?,?,?,?,?,?)}");
